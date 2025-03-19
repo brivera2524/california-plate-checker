@@ -1,6 +1,19 @@
-# config.py
+# URLs
+REFERER_URL = "https://www.dmv.ca.gov/wasapp/ipp2/initPers.do"
+CHECK_URL = "https://www.dmv.ca.gov/wasapp/ipp2/checkPers.do"
 
-# HTTP Headers
+# HTTP Headers for session validation
+INITIAL_PAYLOAD = {
+    "acknowledged": "true", 
+    "_acknowledged": "on" 
+}
+
+INITIAL_HEADERS = {
+    "Referer": REFERER_URL,
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+}
+
+# HTTP Headers for plate check requests
 HEADERS = {
     "Accept": "*/*",
     "Accept-Language": "en-US,en;q=0.9",
@@ -19,6 +32,4 @@ PAYLOAD_TEMPLATE = {
     **{f"plateChar{i}": "" for i in range(7)}
 }
 
-# URLs
-INIT_URL = "https://www.dmv.ca.gov/wasapp/ipp2/initPers.do"
-CHECK_URL = "https://www.dmv.ca.gov/wasapp/ipp2/checkPers.do"
+
