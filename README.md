@@ -2,6 +2,15 @@
 
 This Python script automates the process of checking license plate availability via the California DMV website. It uses asyncio and aiohttp to perform high-speed, parallel requests, ensuring efficient validation of multiple plates at once. Results are saved to a CSV file for easy review.
 
+## Features
+- Asynchronous Processing: Uses asyncio and aiohttp for efficient, non-blocking requests.
+
+- Multi-Worker Support: Allows multiple concurrent requests to speed up plate availability checks.
+
+- Filters plate numbers from a text file, only keeping valid CA license plates (2-7 characters) before processing.
+
+- CSV Output: Saves results in a structured CSV format for easy review and analysis.
+
 
 ## Requirements
 
@@ -31,5 +40,4 @@ python plate_checker.py -i plates.txt -o results.csv -w 5
 ### Notes
 
 - This script is for educational purposes only. Use it responsibly and ensure compliance with applicable laws and terms of service.
-- I am not sure what the ideal number of workers is, but 10 seems to go decently fast.
-
+- The optimal number of workers may vary based on internet speed and DMV rate limits. From testing, 10 workers provide a good balance between speed and avoiding potential request blocks.
