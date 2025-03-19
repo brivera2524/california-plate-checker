@@ -13,7 +13,7 @@ def load_plates_from_text(filepath):
             all_words = f.read().splitlines()
 
         # Filter words of length 1 to 7
-        test_list = [word.lower() for word in all_words if len(word)==7]
+        test_list = [word.lower() for word in all_words if 2 <= len(word) <= 7]
         
         # Sort by length (descending), then alphabetically
         test_list = sorted(test_list, key=lambda word: (-len(word), word))
@@ -38,7 +38,6 @@ def save_to_file(results, save_file_path):
         for plate, status in sorted_results:
             writer.writerow([plate, status])
     
-
 
 # Define Headers (taken from browser cURL request), Not entirely sure what is necessary
 headers = {
@@ -87,7 +86,6 @@ payload_template = {
 
 init_url = "https://www.dmv.ca.gov/wasapp/ipp2/initPers.do" 
 url = "https://www.dmv.ca.gov/wasapp/ipp2/checkPers.do"
-
 
 
         
@@ -177,42 +175,50 @@ async def get_plate_status(session: aiohttp.ClientSession, plate):
         
     return plate_status
     
-async def main():
-    
+import argparse
+
+async def main(input_file, output_file, num_workers):
     # Load plates from a text file
-    plates = load_plates_from_text("common.txt")
-    plates = plates[:1000]
-    
-    #Instantiate Queue
+    plates = load_plates_from_text(input_file)
+
+    # Instantiate Queue
     queue = asyncio.Queue()
-    
-    num_workers = 10 # Change this to set the number of workers
-    
-    # Create worker instances concurrently
+
+    # Create worker instances
     workers = await asyncio.gather(*(Worker.create(queue) for _ in range(num_workers)))
-    
-    # Enqueue tasks
+
+    # Enqueue plate numbers
     for plate in plates:
         await queue.put(plate)
-    
-    # Enqueue one sentinel per worker to signal termination
+
+    # Enqueue sentinel values to signal workers to stop
     for _ in range(num_workers):
         await queue.put(None)
-    
-    # Create tasks for each worker's process loop and wait for them concurrently
+
+    # Create and gather worker tasks
     tasks = [asyncio.create_task(worker.process_task()) for worker in workers]
     results = await asyncio.gather(*tasks)
-    
+
     # Close all sessions
     for worker in workers:
         await worker.close()
-        
+
+    # Combine results
     final_results = {}
     for d in results:
         final_results.update(d)
-        
-    save_to_file(final_results, "results.csv")
+
+    # Save results
+    save_to_file(final_results, output_file)
         
     
 
-asyncio.run(main())
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Check California DMV license plate availability.")
+    parser.add_argument("-i", "--input", type=str, help="Input file containing plate numbers.")
+    parser.add_argument("-o", "--output", type=str, help="Output CSV file for results.")
+    parser.add_argument("-w", "--workers", type=int, help="Number of concurrent workers.")
+
+    args = parser.parse_args()
+
+    asyncio.run(main(args.input, args.output, args.workers))
