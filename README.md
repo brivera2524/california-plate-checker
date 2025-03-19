@@ -41,3 +41,5 @@ python plate_checker.py -i plates.txt -o results.csv -w 5
 
 - This script is for educational purposes only. Use it responsibly and ensure compliance with applicable laws and terms of service.
 - The optimal number of workers may vary based on internet speed and DMV rate limits. From testing, 10 workers provide a good balance between speed and avoiding potential request blocks.
+- Each worker gets its own session (JSESSIONID) to prevent mismatched plate statuses.
+- Workers process one request at a time to ensure accurate results.
