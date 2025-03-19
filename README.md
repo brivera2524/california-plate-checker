@@ -1,14 +1,7 @@
 # California License Plate Checker
 
-A Python tool to check California license plate combinations against a list of common words to find potentially interesting or meaningful combinations.
+This Python script automates the process of checking license plate availability via the California DMV website. It uses asyncio and aiohttp to perform high-speed, parallel requests, ensuring efficient validation of multiple plates at once. Results are saved to a CSV file for easy review.
 
-## Features
-
-- Checks California license plate combinations against a list of common words
-- Generates CSV output with matching results
-- Supports 7-character plate format
-- Filters out words that don't match the valid plate length
-- Can use any text file as input for word combinations
 
 ## Requirements
 
@@ -16,15 +9,27 @@ A Python tool to check California license plate combinations against a list of c
 - aiohttp>=3.8.0
 - colorama>=0.4.6
 
+
 ## Usage
 
 1. Clone the repository
 2. Install dependencies: `pip install -r requirements.txt`
-3. Prepare a text file with words to check (one word per line)
-4. Run the script: `python plate_checker.py`
+3. (Optional) Add a text file with plate numbers on individual lines to the directory
+4. Run the script with:
+```bash
+python plate_checker.py -i plates.txt -o results.csv -w 5 
+```
 
-The script will generate a `results.csv` file containing matching plate combinations.
+### Arguments
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `-i` | Input file with plate numbers | `common.txt` |
+| `-o` | Output CSV file | `results.csv` |
+| `-w` | Number of workers | `10` |
 
-## License
 
-MIT License 
+### Notes
+
+- This script is for educational purposes only. Use it responsibly and ensure compliance with applicable laws and terms of service.
+- I am not sure what the ideal number of workers is, but 10 seems to go decently fast.
+
