@@ -11,6 +11,8 @@ This Python script automates the process of checking license plate availability 
 
 - CSV Output: Saves results in a structured CSV format for easy review and analysis.
 
+- Tested with up to 100 simulataneous workers, averaging 152 plate checks per second across 6550 plates.
+
 
 ## Requirements
 
