@@ -1,6 +1,6 @@
 # California License Plate Checker
 
-This Python script automates the process of checking license plate availability via the California DMV website. It uses asyncio and aiohttp to perform high-speed, parallel requests, ensuring efficient validation of multiple plates at once. Results are saved to a CSV file for easy review.
+This Python script automates the process of checking license plate availability via the California DMV website. It sends asynchronous POST requests directly to the DMV server using asyncio and aiohttp, eliminating the need for slower tools like Selenium or headless browsers. The result is a highly efficient, non-blocking validation process capable of rapidly handling multiple simultaneous requests. Results are saved to a CSV file for easy review.
 
 ## Features
 - Asynchronous Processing: Uses asyncio and aiohttp for efficient, non-blocking requests.
@@ -28,7 +28,7 @@ This Python script automates the process of checking license plate availability 
 3. (Optional) Add a text file with plate numbers on individual lines to the directory
 4. Run the script with:
 ```bash
-python plate_checker.py -i plates.txt -o results.csv -w 5 
+python plate_checker.py -i common.txt -o results.csv -w 10 
 ```
 
 ### Arguments
@@ -42,6 +42,4 @@ python plate_checker.py -i plates.txt -o results.csv -w 5
 ### Notes
 
 - This script is for educational purposes only. Use it responsibly and ensure compliance with applicable laws and terms of service.
-- The optimal number of workers may vary based on internet speed and DMV rate limits. From testing, 10 workers provide a good balance between speed and avoiding potential request blocks.
-- Each worker gets its own session (JSESSIONID) to prevent mismatched plate statuses.
-- Workers process one request at a time to ensure accurate results.
+- The optimal number of workers may vary based on internet speed and DMV rate limits. From testing, 100 workers processed common.txt in about 43 seconds, averaging 152 checks per second. The amount of workers could likely be increased, as I did not encounter any rate limiting. However, I would not recommend exceeding this number to avoid abusing the DMV's server.
