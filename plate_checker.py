@@ -5,6 +5,7 @@ import os
 import csv
 from config import INITIAL_PAYLOAD, INITIAL_HEADERS, HEADERS, PAYLOAD_TEMPLATE, CHECK_URL
 import argparse
+from time import time
 
 def load_plates_from_text(filepath):
     # If file exists, open it
@@ -105,7 +106,9 @@ class Worker:
 
 
 async def main(input_file, output_file, num_workers):
+    start_time = time()
     plates = load_plates_from_text(input_file)
+
     queue = asyncio.Queue()
     workers = await asyncio.gather(*(Worker.create(queue) for _ in range(num_workers)))
     
@@ -123,6 +126,12 @@ async def main(input_file, output_file, num_workers):
     final_results = {}
     for d in results:
         final_results.update(d)
+    
+    end_time = time()
+    
+    total_duration = end_time - start_time
+    
+    print(f"Total Time: {total_duration:.2f} seconds")
     
     save_to_file(final_results, output_file)
 
