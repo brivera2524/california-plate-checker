@@ -7,8 +7,8 @@ This file defines the Worker class for handling asynchronous license plate avail
 import asyncio
 import aiohttp
 from typing import Dict, Any
-from colorama import Fore, Style
-from .config import CHECK_URL_YARL, INITIAL_PAYLOAD, INITIAL_HEADERS, HEADERS, PAYLOAD_TEMPLATE
+from colorama import Style
+from .config import CHECK_URL_YARL, INITIAL_PAYLOAD, INITIAL_HEADERS, HEADERS, PAYLOAD_TEMPLATE, AVAILABLE_COLOR, UNAVAILABLE_COLOR
 
 
 class Worker:
@@ -116,9 +116,9 @@ class Worker:
         plate_status = response_json.get("code", "UNKNOWN")
         
         if plate_status == "AVAILABLE":
-            print(f"{Fore.GREEN}{plate.upper()}{Style.RESET_ALL}")
+            print(f"{AVAILABLE_COLOR}{plate.upper()}{Style.RESET_ALL}")
         else:
-            print(f"{Fore.RED}{plate.upper()}{Style.RESET_ALL}")
+            print(f"{UNAVAILABLE_COLOR}{plate.upper()}{Style.RESET_ALL}")
             
         return plate_status
 

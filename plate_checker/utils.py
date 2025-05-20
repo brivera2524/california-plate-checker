@@ -7,10 +7,7 @@ This file contains utility functions for loading license plate data from files a
 import os
 import csv
 from typing import List, Dict, Any
-
-# Constants
-MIN_PLATE_LENGTH: int = 2
-MAX_PLATE_LENGTH: int = 7
+from .config import MIN_PLATE_LENGTH, MAX_PLATE_LENGTH
 
 
 def load_plates_from_text(filepath: str) -> List[str]:
