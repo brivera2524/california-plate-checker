@@ -13,6 +13,7 @@ from time import time
 from .utils import load_plates_from_text, save_to_file
 from .plate_generator import generate_plates_from_topic
 from .worker import Worker
+from .config import DEFAULT_NUM_WORKERS
 
 
 async def main(input_file: Optional[str], output_file: str, workers: int, topic: Optional[str] = None, num_plates: Optional[int] = None) -> None:
@@ -96,7 +97,7 @@ if __name__ == "__main__":
     group.add_argument("-t", "--topic", type=str, help="Topic for generating plates with OpenAI (e.g., 'animals').")
     parser.add_argument("-o", "--output", type=str, required=True, help="Output CSV file for results.")
     parser.add_argument("-n", "--num-plates", type=int, help="Number of plates to generate (required if topic is used).")
-    parser.add_argument("-w", "--workers", type=int, default=10, help="Number of concurrent workers (optional, default=10).")
+    parser.add_argument("-w", "--workers", type=int, default=DEFAULT_NUM_WORKERS, help="Number of concurrent workers (optional, default=10).")
 
     args = parser.parse_args()
     

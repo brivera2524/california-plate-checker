@@ -9,11 +9,7 @@ from typing import List, Optional
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 import os
-
-# Constants
-MIN_PLATE_LENGTH: int = 2
-MAX_PLATE_LENGTH: int = 7
-OPENAI_MODEL: str = "gpt-3.5-turbo"
+from .config import MIN_PLATE_LENGTH, MAX_PLATE_LENGTH, OPENAI_MODEL, OPENAI_PROMPT_TEMPLATE
 
 
 async def generate_plates_from_topic(topic: str, num_plates: int) -> List[str]:
@@ -36,15 +32,11 @@ async def generate_plates_from_topic(topic: str, num_plates: int) -> List[str]:
     # Initialize OpenAI client.
     client = AsyncOpenAI(api_key=api_key)
 
-    # Define the prompt for OpenAI.
-    prompt = (
-        f"Generate a list of {num_plates} creative license plate ideas related to '{topic}'. "
-        f"Each plate must be between {MIN_PLATE_LENGTH} and {MAX_PLATE_LENGTH} characters long, "
-        "using only letters and numbers. Return only the list, one plate per line."
-        "Do not number the list, or include any other characters."
-        "Do not use the number 0 (zero) in any plate."
+    # Define the prompt for OpenAI using the template from config
+    prompt = OPENAI_PROMPT_TEMPLATE.format(
+        num_plates=num_plates,
+        topic=topic,
     )
-
     try:
         # Make the API call asynchronously.
         response = await client.chat.completions.create(

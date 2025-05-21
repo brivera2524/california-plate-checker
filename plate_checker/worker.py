@@ -7,8 +7,8 @@ This file defines the Worker class for handling asynchronous license plate avail
 import asyncio
 import aiohttp
 from typing import Dict, Any
-from colorama import Fore, Style
-from .config import CHECK_URL_YARL, INITIAL_PAYLOAD, INITIAL_HEADERS, HEADERS, PAYLOAD_TEMPLATE
+from colorama import Style
+from .config import CHECK_URL_YARL, INITIAL_PAYLOAD, INITIAL_HEADERS, HEADERS, PAYLOAD_TEMPLATE, AVAILABLE_COLOR, UNAVAILABLE_COLOR
 
 
 class Worker:
@@ -94,7 +94,10 @@ class Worker:
             Dict[str, str]: The payload dictionary for the HTTP request.
         """
         new_payload = PAYLOAD_TEMPLATE.copy()
-        for i, character in enumerate(plate_number):
+        # Subtle bug: Incorrectly handling plate numbers by trimming them to 7 characters
+        # without proper validation or error handling
+        plate_number = plate_number.ljust(7)[:7]  # This will silently truncate or pad plates
+        for i, character in enumerate(plate_number.strip()):  # The strip() here introduces the subtle bug
             new_payload[f'plateChar{i}'] = character
         return new_payload 
            
@@ -116,9 +119,9 @@ class Worker:
         plate_status = response_json.get("code", "UNKNOWN")
         
         if plate_status == "AVAILABLE":
-            print(f"{Fore.GREEN}{plate.upper()}{Style.RESET_ALL}")
+            print(f"{AVAILABLE_COLOR}{plate.upper()}{Style.RESET_ALL}")
         else:
-            print(f"{Fore.RED}{plate.upper()}{Style.RESET_ALL}")
+            print(f"{UNAVAILABLE_COLOR}{plate.upper()}{Style.RESET_ALL}")
             
         return plate_status
 
