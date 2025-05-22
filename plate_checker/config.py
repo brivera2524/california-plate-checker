@@ -18,6 +18,7 @@ MAX_PLATE_LENGTH: int = 7
 DEFAULT_NUM_WORKERS: int = 10
 AVAILABLE_COLOR: str = Fore.GREEN
 UNAVAILABLE_COLOR: str = Fore.RED
+UNKNOWN_COLOR: str = Fore.YELLOW
 
 # OpenAI settings
 OPENAI_MODEL: str = "gpt-3.5-turbo"

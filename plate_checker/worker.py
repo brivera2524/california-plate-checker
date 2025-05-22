@@ -8,7 +8,7 @@ import asyncio
 import aiohttp
 from typing import Dict, Any
 from colorama import Style
-from .config import CHECK_URL_YARL, INITIAL_PAYLOAD, INITIAL_HEADERS, HEADERS, PAYLOAD_TEMPLATE, AVAILABLE_COLOR, UNAVAILABLE_COLOR
+from .config import CHECK_URL_YARL, INITIAL_PAYLOAD, INITIAL_HEADERS, HEADERS, PAYLOAD_TEMPLATE, AVAILABLE_COLOR, UNAVAILABLE_COLOR, UNKNOWN_COLOR
 
 
 class Worker:
@@ -106,7 +106,7 @@ class Worker:
             plate (str): The license plate to check.
             
         Returns:
-            str: The status of the plate (e.g., "AVAILABLE", "UNAVAILABLE").
+            str: The status of the plate (e.g., "AVAILABLE", "NOT_AVAILABLE").
         """
         new_payload = self.update_payload(plate)
         
@@ -117,8 +117,10 @@ class Worker:
         
         if plate_status == "AVAILABLE":
             print(f"{AVAILABLE_COLOR}{plate.upper()}{Style.RESET_ALL}")
-        else:
+        elif plate_status == "NOT_AVAILABLE":
             print(f"{UNAVAILABLE_COLOR}{plate.upper()}{Style.RESET_ALL}")
+        else:
+            print(f"{UNKNOWN_COLOR}{plate.upper()}{Style.RESET_ALL}")
             
         return plate_status
 
