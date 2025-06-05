@@ -94,10 +94,9 @@ class Worker:
             Dict[str, str]: The payload dictionary for the HTTP request.
         """
         new_payload = PAYLOAD_TEMPLATE.copy()
-        # Subtle bug: Incorrectly handling plate numbers by trimming them to 7 characters
-        # without proper validation or error handling
-        plate_number = plate_number.ljust(7)[:7]  # This will silently truncate or pad plates
-        for i, character in enumerate(plate_number.strip()):  # The strip() here introduces the subtle bug
+
+        # Populate the payload
+        for i, character in enumerate(plate_number):
             new_payload[f'plateChar{i}'] = character
         return new_payload 
            
